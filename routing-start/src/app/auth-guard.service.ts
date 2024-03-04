@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivateFn, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { CanActivateFn, ActivatedRouteSnapshot, RouterStateSnapshot, Router, CanActivateChildFn } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { AuthService } from './auth.service';
 
@@ -7,7 +7,7 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 
-export class AuthGuard implements CanActivateFn {
+export class AuthGuard implements CanActivateFn, CanActivateChildFn {
 
   constructor(private authService: AuthService, private router: Router) {}
   
@@ -22,6 +22,10 @@ export class AuthGuard implements CanActivateFn {
           }
         }
       );
+  }
+
+  CanActivateChildFn(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    return this.CanActivateFn(route, state);
   }
 
 }
